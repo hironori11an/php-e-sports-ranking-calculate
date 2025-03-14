@@ -1,0 +1,9 @@
+vendor
+.DS_Store
+.idea
+.vscode
+.env
+.env.local
+.phpunit.cache
+coverage
+coverage_report

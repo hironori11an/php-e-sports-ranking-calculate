@@ -1,0 +1,24 @@
+{
+    "name": "yumemi/ranking-cli",
+    "description": "ゲームのランキング集計CLIプログラム",
+    "type": "project",
+    "require": {
+        "php": "^8.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "__tests__/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+} 
