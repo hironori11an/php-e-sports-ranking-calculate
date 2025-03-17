@@ -9,9 +9,9 @@
       <directory>__tests__</directory>
     </testsuite>
   </testsuites>
-  <coverage>
+  <coverage includeUncoveredFiles="true" pathCoverage="true">
     <report>
-      <html outputDirectory="coverage"/>
+      <html outputDirectory="coverage_report" lowUpperBound="50" highLowerBound="90"/>
       <text outputFile="php://stdout" showUncoveredFiles="true" showOnlySummary="false"/>
     </report>
   </coverage>
@@ -19,5 +19,8 @@
     <include>
       <directory suffix=".php">src</directory>
     </include>
+    <exclude>
+      <file>src/index.php</file>
+    </exclude>
   </source>
 </phpunit> 

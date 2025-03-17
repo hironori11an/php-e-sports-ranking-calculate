@@ -50,5 +50,9 @@ php src/index.php game_entry_log.csv game_score_log.csv
 ## テスト実行方法
 
 ```bash
+# 
+# phpunitの実行
 composer test
+# HTMLベースのコードカバレッジレポート
+composer test-html
 ``` 
