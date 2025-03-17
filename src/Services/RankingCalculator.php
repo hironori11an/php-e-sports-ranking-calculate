@@ -109,17 +109,6 @@ class RankingCalculator
             }
         }
 
-        // 上位10位までのプレイヤーのみを返す（同点の場合は例外）
-        if (count($rankings) > 10) {
-            // 10位のスコアと同点のプレイヤーがいるかチェック
-            $tenthRank = $rankings[9]['rank'];
-            $tenthScore = $rankings[9]['score'];
-            
-            // 10位と同じランクのプレイヤーがいない場合は10位までを返す
-            if ($rankings[10]['rank'] > $tenthRank) {
-                return array_slice($rankings, 0, 10);
-            }
-        }
 
         return $rankings;
     }
