@@ -21,6 +21,7 @@
     </include>
     <exclude>
       <file>src/index.php</file>
+      <file>src/Container.php</file>
     </exclude>
   </source>
 </phpunit> 
