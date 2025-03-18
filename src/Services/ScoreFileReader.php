@@ -6,6 +6,12 @@ use App\Exceptions\InvalidFileFormatException;
 
 class ScoreFileReader
 {
+    // 定数の定義
+    private const HEADER_COUNT = 3;
+    private const TIMESTAMP_INDEX = 0;
+    private const PLAYER_ID_INDEX = 1;
+    private const SCORE_INDEX = 2;
+
     /**
      * スコアファイルを読み込み、各行に対してコールバック関数を実行する
      *
@@ -34,10 +40,10 @@ class ScoreFileReader
             }
 
             // ヘッダーの検証
-            if (count($header) !== 3 || 
-                $header[0] !== 'create_timestamp' || 
-                $header[1] !== 'player_id' || 
-                $header[2] !== 'score') {
+            if (count($header) !== self::HEADER_COUNT || 
+                $header[self::TIMESTAMP_INDEX] !== 'create_timestamp' || 
+                $header[self::PLAYER_ID_INDEX] !== 'player_id' || 
+                $header[self::SCORE_INDEX] !== 'score') {
                 throw new InvalidFileFormatException('ヘッダーが不正です');
             }
 
@@ -49,13 +55,13 @@ class ScoreFileReader
                 }
 
                 // 列数の検証
-                if (count($row) !== 3) {
+                if (count($row) !== self::HEADER_COUNT) {
                     throw new InvalidFileFormatException('列数が不正です');
                 }
 
-                $timestamp = $row[0];
-                $playerId = $row[1];
-                $score = $row[2];
+                $timestamp = $row[self::TIMESTAMP_INDEX];
+                $playerId = $row[self::PLAYER_ID_INDEX];
+                $score = $row[self::SCORE_INDEX];
 
                 // タイムスタンプの形式を検証
                 if (!$this->isValidTimestamp($timestamp)) {

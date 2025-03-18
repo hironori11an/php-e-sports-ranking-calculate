@@ -6,6 +6,10 @@ use App\Exceptions\InvalidFileFormatException;
 
 class EntryFileReader
 {
+    // 定数の定義
+    private const PLAYER_ID_INDEX = 0;
+    private const HANDLE_NAME_INDEX = 1;
+
     /**
      * エントリーファイルを読み込み、プレイヤーIDをキー、ハンドルネームを値とする連想配列を返す
      *
@@ -34,7 +38,7 @@ class EntryFileReader
             }
 
             // ヘッダーの検証
-            if (count($header) !== 2 || $header[0] !== 'player_id' || $header[1] !== 'handle_name') {
+            if (count($header) !== 2 || $header[self::PLAYER_ID_INDEX] !== 'player_id' || $header[self::HANDLE_NAME_INDEX] !== 'handle_name') {
                 throw new InvalidFileFormatException('ヘッダーが不正です');
             }
 
@@ -52,8 +56,8 @@ class EntryFileReader
                     throw new InvalidFileFormatException('列数が不正です');
                 }
 
-                $playerId = $row[0];
-                $handleName = $row[1];
+                $playerId = $row[self::PLAYER_ID_INDEX];
+                $handleName = $row[self::HANDLE_NAME_INDEX];
 
                 // プレイヤーIDとハンドルネームを連想配列に追加
                 $entries[$playerId] = $handleName;
