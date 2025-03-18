@@ -22,7 +22,7 @@ php src/index.php [エントリーファイルパス] [スコアファイルパ�
 ### 例
 
 ```bash
-php src/index.php game_entry_log.csv game_score_log.csv
+php src/index.php work/entry.csv work/score.csv
 ```
 
 ## 入力ファイル仕様
