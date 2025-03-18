@@ -55,4 +55,13 @@ php src/index.php game_entry_log.csv game_score_log.csv
 composer test
 # HTMLベースのコードカバレッジレポート
 composer test-html
-``` 
+```
+
+## GitHub Actions CI/CD設定
+
+このプロジェクトでは、GitHub Actionsを使用して継続的インテグレーション（CI）を実装しています。
+
+### 設定内容
+
+- mainブランチへのプルリクエスト時に自動的にPHPUnitテストが実行されます
+- テストが失敗した場合、プルリクエストのマージがブロックされます
