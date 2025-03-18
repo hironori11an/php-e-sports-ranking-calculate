@@ -70,7 +70,7 @@ class ArgumentProcessorTest extends TestCase
         $argc = 2;
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('入力引数の数が不正です。');
+        $this->expectExceptionMessage('ほげ入力引数の数が不正です。');
         
         $this->argumentProcessor->processArguments($argv, $argc);
     }
