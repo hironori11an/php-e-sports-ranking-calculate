@@ -4,8 +4,7 @@
 
 ## 実行環境
 
-- PHP 8.2以上
-- Composer
+- PHP 8.2
 
 ## インストール方法
 
@@ -50,14 +49,13 @@ php src/index.php game_entry_log.csv game_score_log.csv
 ## テスト実行方法
 
 ```bash
-# 
 # phpunitの実行
 composer test
 # HTMLベースのコードカバレッジレポート
 composer test-html
 ```
 
-## GitHub Actions CI/CD設定
+## GitHub Actions CI設定
 
 このプロジェクトでは、GitHub Actionsを使用して継続的インテグレーション（CI）を実装しています。
 
