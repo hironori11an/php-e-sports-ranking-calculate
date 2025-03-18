@@ -3,6 +3,7 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use App\Container;
 use App\Services\EntryFileReader;
 use App\Services\ScoreFileReader;
 use App\Services\RankingCalculator;
@@ -14,17 +15,20 @@ use App\Exceptions\InvalidFileFormatException;
 
 // メイン処理
 try {
+    // DIコンテナの初期化
+    $container = Container::build();
+    
     // 引数の処理
-    $argumentProcessor = new ArgumentProcessor();
+    $argumentProcessor = $container->get(ArgumentProcessor::class);
     list($entryFilePath, $scoreFilePath) = $argumentProcessor->processArguments($argv, $argc);
 
     // エントリーファイルの読み込み
-    $entryFileReader = new EntryFileReader();
+    $entryFileReader = $container->get(EntryFileReader::class);
     $entries = $entryFileReader->readEntries($entryFilePath);
 
     // スコアファイルの読み込みとランキング計算
-    $scoreFileReader = new ScoreFileReader();
-    $rankingCalculator = new RankingCalculator();
+    $scoreFileReader = $container->get(ScoreFileReader::class);
+    $rankingCalculator = $container->get(RankingCalculator::class);
     
     // スコアファイルをストリーム処理して、エントリー済みプレイヤーの最高スコアを計算
     $scoreFileReader->processScores($scoreFilePath, function ($playerId, $score) use ($rankingCalculator, $entries) {
@@ -38,7 +42,7 @@ try {
     $rankings = $rankingCalculator->calculateRankings($entries);
     
     // ランキングの出力
-    $outputter = new RankingOutputter();
+    $outputter = $container->get(RankingOutputter::class);
     $outputter->outputRanking($rankings);
 
     exit(0);
