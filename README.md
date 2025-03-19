@@ -4,26 +4,9 @@
 
 ## 実行環境
 
+- Docker
 - PHP 8.2
 
-## インストール方法
-
-```bash
-# 依存パッケージのインストール
-composer install
-```
-
-## 使用方法
-
-```bash
-php src/index.php [エントリーファイルパス] [スコアファイルパス]
-```
-
-### 例
-
-```bash
-php src/index.php work/entry.csv work/score.csv
-```
 
 ## 入力ファイル仕様
 
@@ -45,6 +28,25 @@ php src/index.php work/entry.csv work/score.csv
 - 1行目はヘッダー: `rank,player_id,handle_name,score`
 - 2行目以降がランキングデータ（上位10位まで）
 - 同点の場合は同じランクを付与し、player_idでソート
+
+## 開発環境の立ち上げ方
+
+環境変数の`APP_ENV=development`の場合にXdebugをインストールし、有効になります。
+Xdebugはdebugとcoverageように使用しています。
+```bash
+docker-compose up -d
+```
+## 使用方法
+
+```bash
+php src/index.php [エントリーファイルパス] [スコアファイルパス]
+```
+
+### 例
+
+```bash
+php src/index.php work/entry.csv work/score.csv
+```
 
 ## テスト実行方法
 
