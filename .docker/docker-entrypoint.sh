@@ -15,4 +15,8 @@ if [ "$APP_ENV" = "development" ] &&
         " > /usr/local/etc/php/conf.d/xdebug.ini;
 fi
 
-exec "$@"
+# Nginxを起動
+service nginx start
+
+# PHP-FPMを起動
+php-fpm 
