@@ -7,6 +7,10 @@ WORKDIR /var/www/html
 # 必要なパッケージをインストール
 RUN apt-get update && apt-get install -y \
     nginx \
+    git \
+    unzip \
+    libzip-dev \
+    && docker-php-ext-install zip \
     && rm -rf /var/lib/apt/lists/*
 
 # Composerをインストール
