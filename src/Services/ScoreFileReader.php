@@ -13,6 +13,20 @@ class ScoreFileReader
     private const SCORE_INDEX = 2;
 
     /**
+     * 実行環境を保持するプロパティ
+     * testabilityのために外部からアクセス可能なprotectedにする
+     */
+    protected string $environment;
+
+    /**
+     * コンストラクタ
+     */
+    public function __construct()
+    {
+        $this->environment = PHP_SAPI === 'cli' ? 'cli' : 'web';
+    }
+
+    /**
      * スコアファイルを読み込み、各行に対してコールバック関数を実行する
      *
      * @param string $filePath スコアファイルのパス
@@ -21,15 +35,59 @@ class ScoreFileReader
      */
     public function processScores(string $filePath, callable $callback): void
     {
+        // 実行環境に応じて処理を分岐
+        if ($this->environment === 'cli') {
+            $this->processScoresCLI($filePath, $callback);
+        } else {
+            $this->processScoresWeb($filePath, $callback);
+        }
+    }
+
+    /**
+     * CLI環境でスコアファイルを読み込む処理
+     *
+     * @param string $filePath スコアファイルのパス
+     * @param callable $callback コールバック関数
+     * @throws InvalidFileFormatException ファイル形式が不正な場合
+     */
+    private function processScoresCLI(string $filePath, callable $callback): void
+    {
         // ファイルが存在しない場合は例外をスロー
         if (!file_exists($filePath)) {
             throw new \Exception("ファイルが存在しません: {$filePath}");
         }
 
-        // ファイルを開く
-        $handle = fopen($filePath, 'r');
+        $this->processScoresFromHandle(fopen($filePath, 'r'), $callback);
+    }
+
+    /**
+     * Web環境でスコアファイルを読み込む処理
+     *
+     * @param string $filePath スコアファイルのパス
+     * @param callable $callback コールバック関数
+     * @throws InvalidFileFormatException ファイル形式が不正な場合
+     */
+    private function processScoresWeb(string $filePath, callable $callback): void
+    {
+        // ファイルが存在しない場合は例外をスロー
+        if (!file_exists($filePath)) {
+            throw new \Exception("ファイルが存在しません: {$filePath}");
+        }
+
+        $this->processScoresFromHandle(fopen($filePath, 'r'), $callback);
+    }
+
+    /**
+     * ファイルハンドルからスコアを処理する共通処理
+     *
+     * @param resource $handle ファイルハンドル
+     * @param callable $callback コールバック関数
+     * @throws InvalidFileFormatException ファイル形式が不正な場合
+     */
+    private function processScoresFromHandle($handle, callable $callback): void
+    {
         if ($handle === false) {
-            throw new \Exception("ファイルを開けませんでした: {$filePath}");
+            throw new \Exception("ファイルを開けませんでした");
         }
 
         try {

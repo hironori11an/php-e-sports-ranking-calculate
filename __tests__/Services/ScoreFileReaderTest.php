@@ -5,6 +5,7 @@ namespace Tests\Services;
 use App\Exceptions\InvalidFileFormatException;
 use App\Services\ScoreFileReader;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class ScoreFileReaderTest extends TestCase
 {
@@ -24,8 +25,24 @@ class ScoreFileReaderTest extends TestCase
         }
     }
 
-    public function testProcessScoresWithValidFile(): void
+    private function createScoreFileReaderWithMockedEnvironment(string $env): ScoreFileReader
     {
+        $reader = new ScoreFileReader();
+        
+        // 環境をモックするためにリフレクションを使用
+        $reflectionClass = new ReflectionClass($reader);
+        $reflectionProperty = $reflectionClass->getProperty('environment');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($reader, $env);
+        
+        return $reader;
+    }
+
+    public function testProcessScoresWithValidFileInCliEnvironment(): void
+    {
+        // CLIモックスコアリーダーを作成
+        $scoreFileReader = $this->createScoreFileReaderWithMockedEnvironment('cli');
+        
         // 有効なCSVファイルを作成
         $content = "create_timestamp,player_id,score\n" .
                    "2023-01-01 12:00:00,player001,100\n" .
@@ -40,7 +57,33 @@ class ScoreFileReaderTest extends TestCase
             }
         };
 
-        $this->scoreFileReader->processScores($this->tempFile, $callback);
+        $scoreFileReader->processScores($this->tempFile, $callback);
+
+        $this->assertCount(2, $results);
+        $this->assertEquals(200, $results['player001']);
+        $this->assertEquals(150, $results['player002']);
+    }
+
+    public function testProcessScoresWithValidFileInWebEnvironment(): void
+    {
+        // Webモックスコアリーダーを作成
+        $scoreFileReader = $this->createScoreFileReaderWithMockedEnvironment('web');
+        
+        // 有効なCSVファイルを作成
+        $content = "create_timestamp,player_id,score\n" .
+                   "2023-01-01 12:00:00,player001,100\n" .
+                   "2023-01-01 12:01:00,player001,200\n" .
+                   "2023-01-01 12:02:00,player002,150\n";
+        file_put_contents($this->tempFile, $content);
+
+        $results = [];
+        $callback = function ($playerId, $score) use (&$results) {
+            if (!isset($results[$playerId]) || $score > $results[$playerId]) {
+                $results[$playerId] = $score;
+            }
+        };
+
+        $scoreFileReader->processScores($this->tempFile, $callback);
 
         $this->assertCount(2, $results);
         $this->assertEquals(200, $results['player001']);
