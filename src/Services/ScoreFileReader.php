@@ -13,6 +13,20 @@ class ScoreFileReader
     private const SCORE_INDEX = 2;
 
     /**
+     * 実行環境を保持するプロパティ
+     * testabilityのために外部からアクセス可能なprotectedにする
+     */
+    protected string $environment;
+
+    /**
+     * コンストラクタ
+     */
+    public function __construct()
+    {
+        $this->environment = PHP_SAPI === 'cli' ? 'cli' : 'web';
+    }
+
+    /**
      * スコアファイルを読み込み、各行に対してコールバック関数を実行する
      *
      * @param string $filePath スコアファイルのパス
@@ -22,7 +36,7 @@ class ScoreFileReader
     public function processScores(string $filePath, callable $callback): void
     {
         // 実行環境に応じて処理を分岐
-        if (PHP_SAPI === 'cli') {
+        if ($this->environment === 'cli') {
             $this->processScoresCLI($filePath, $callback);
         } else {
             $this->processScoresWeb($filePath, $callback);

@@ -11,6 +11,20 @@ class EntryFileReader
     private const HANDLE_NAME_INDEX = 1;
 
     /**
+     * 実行環境を保持するプロパティ
+     * testabilityのために外部からアクセス可能なprotectedにする
+     */
+    protected string $environment;
+
+    /**
+     * コンストラクタ
+     */
+    public function __construct()
+    {
+        $this->environment = PHP_SAPI === 'cli' ? 'cli' : 'web';
+    }
+
+    /**
      * エントリーファイルを読み込み、プレイヤーIDをキー、ハンドルネームを値とする連想配列を返す
      *
      * @param string $filePath エントリーファイルのパス
@@ -20,7 +34,7 @@ class EntryFileReader
     public function readEntries(string $filePath): array
     {
         // 実行環境に応じて処理を分岐
-        if (PHP_SAPI === 'cli') {
+        if ($this->environment === 'cli') {
             return $this->readEntriesCLI($filePath);
         } else {
             return $this->readEntriesWeb($filePath);
