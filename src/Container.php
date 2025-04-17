@@ -4,11 +4,13 @@ namespace App;
 
 use DI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
+use Slim\Views\Twig;
 use App\Services\EntryFileReader;
 use App\Services\ScoreFileReader;
 use App\Services\RankingCalculator;
 use App\Services\RankingOutputter;
 use App\Services\ArgumentProcessor;
+use App\Action\Ranking\RankingFormAction;
 
 class Container
 {
@@ -31,6 +33,9 @@ class Container
             // ランキング関連
             RankingCalculator::class => \DI\autowire(),
             RankingOutputter::class => \DI\autowire(),
+            
+            // Webアクション
+            RankingFormAction::class => \DI\autowire(),
         ]);
         
         return $containerBuilder->build();

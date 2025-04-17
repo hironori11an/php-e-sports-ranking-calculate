@@ -1,9 +1,85 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Welcome to Slim!</title>
+    <title>ゲームランキング集計アプリ</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            background-color: #f9f9f9;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .description {
+            margin-bottom: 20px;
+            color: #666;
+        }
+        .note {
+            font-size: 0.9em;
+            color: #777;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
-<h1>Hello {{ name }}</h1>
+    <div class="container">
+        <h1>ゲームランキング集計アプリ</h1>
+        <p class="description">ゲームのエントリーファイルとプレイログファイルをアップロードして、ランキングを計算します。</p>
+        
+        <form action="/ranking/calculate" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="entry-file">エントリーファイル (CSV):</label>
+                <input type="file" id="entry-file" name="entry_file" accept=".csv">
+                <p class="note">2列のCSVファイル（player_id, handle_name）</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="score-file">プレイログファイル (CSV):</label>
+                <input type="file" id="score-file" name="score_file" accept=".csv">
+                <p class="note">3列のCSVファイル（create_timestamp, player_id, score）</p>
+            </div>
+            
+            <button type="submit">ランキング計算</button>
+        </form>
+    </div>
 </body>
 </html>

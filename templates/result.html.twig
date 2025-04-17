@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ランキング結果 - ゲームランキング集計アプリ</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-top: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ランキング結果</h1>
+        
+        {% if error is defined %}
+            <div class="error">{{ error }}</div>
+        {% else %}
+            {% if rankings|length > 0 %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>順位</th>
+                            <th>プレイヤーID</th>
+                            <th>ハンドルネーム</th>
+                            <th>スコア</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in rankings %}
+                            <tr>
+                                <td>{{ player.rank }}</td>
+                                <td>{{ player.player_id }}</td>
+                                <td>{{ player.handle_name }}</td>
+                                <td>{{ player.score }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>ランキングに該当するデータがありませんでした。</p>
+            {% endif %}
+        {% endif %}
+        
+        <a href="/" class="back-link">トップページに戻る</a>
+    </div>
+</body>
+</html> 

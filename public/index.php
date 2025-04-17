@@ -4,10 +4,15 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
-use App\Action\Home\HomeAction;
+use App\Action\Ranking\RankingFormAction;
+
 require __DIR__ . '/../vendor/autoload.php';
 
-$app = AppFactory::create();
+// DIコンテナの設定
+$container = App\Container::build();
+
+// アプリケーションの作成
+$app = AppFactory::createFromContainer($container);
 
 // Create Twig
 $twig = Twig::create(__DIR__ . '/../templates', ['cache' => false]);
@@ -15,35 +20,24 @@ $twig = Twig::create(__DIR__ . '/../templates', ['cache' => false]);
 // Add Twig-View Middleware
 $app->add(TwigMiddleware::create($app, $twig));
 
-$app->get('/', function (Request $request, Response $response, $args) {
-    $view = Twig::fromRequest($request);
-    
-    return $view->render($response, 'home.html.twig', [
-        'name' => 'John',
-    ]);
+// アップロードサイズ制限の設定
+$app->addBodyParsingMiddleware();
+
+// アップロードディレクトリの設定
+$container->set(Twig::class, function () {
+    return Twig::create(__DIR__ . '/../templates', ['cache' => false]);
 });
 
-// API用のルートグループ
-$app->group('/api', function ($group) {
-    $group->get('/', HomeAction::class);
-    // // APIエンドポイント
-    // $group->get('/users', function (Request $request, Response $response, $args) {
-    //     $users = [
-    //         ['id' => 1, 'name' => 'ユーザー1'],
-    //         ['id' => 2, 'name' => 'ユーザー2']
-    //     ];
-    //     $payload = json_encode($users);
-    //     $response->getBody()->write($payload);
-    //     return $response->withHeader('Content-Type', 'application/json');
-    // });
-    
-    // $group->get('/users/{id}', function (Request $request, Response $response, $args) {
-    //     $id = $args['id'];
-    //     $user = ['id' => $id, 'name' => 'ユーザー' . $id];
-    //     $payload = json_encode($user);
-    //     $response->getBody()->write($payload);
-    //     return $response->withHeader('Content-Type', 'application/json');
-    // });
+// ルーティングの設定
+$app->get('/', function (Request $request, Response $response, $args) {
+    $view = Twig::fromRequest($request);
+    return $view->render($response, 'home.html.twig');
 });
+
+// フォーム送信用ルート
+$app->post('/ranking/calculate', RankingFormAction::class);
+
+// エラーハンドリングの設定
+$errorMiddleware = $app->addErrorMiddleware(true, true, true);
 
 $app->run();

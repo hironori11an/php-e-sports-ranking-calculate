@@ -20,6 +20,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY .docker/nginx.conf /etc/nginx/nginx.conf
 COPY .docker/default.conf /etc/nginx/conf.d/default.conf
 
+# PHP設定ファイルをコピー
+COPY .docker/php.ini.development /usr/local/etc/php/conf.d/php.ini.development
+COPY .docker/php.ini.production /usr/local/etc/php/conf.d/php.ini.production
 # アプリケーションのソースコードをコピー
 COPY . /var/www/html
 
