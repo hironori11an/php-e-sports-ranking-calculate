@@ -8,3 +8,4 @@ vendor
 coverage
 coverage_report
 var/cache
+node_modules

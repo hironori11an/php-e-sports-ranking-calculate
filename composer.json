@@ -1,5 +1,5 @@
 {
-    "name": "yumemi/ranking-cli",
+    "name": "e-sports/ranking-calculate",
     "description": "ゲームのランキング集計CLIプログラム",
     "type": "project",
     "require": {
