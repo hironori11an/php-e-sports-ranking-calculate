@@ -1,0 +1,22 @@
+{
+  "name": "e-sports-ranking-calculate",
+  "version": "1.0.0",
+  "description": "指定されたファイルを処理して得られたランキング入賞者を標準出力に表示するCLIアプリケーション、Webアプリケーション",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "cypress:run:chrome": "cypress run --browser chrome",
+    "cypress:run:firefox": "cypress run --browser firefox",
+    "cypress:run:spec": "cypress run --spec",
+    "e2e": "cypress open --e2e",
+    "e2e:headless": "cypress run --e2e"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^14.3.0"
+  }
+}
